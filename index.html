@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harry's Android Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:   #1E3A5F;
+      --red:    #E63946;
+      --green:  #10B981;
+      --bg:     #F4F6FA;
+      --white:  #FFFFFF;
+      --text:   #0D1B2A;
+      --muted:  #546A7B;
+      --border: #E0E4EA;
+      --radius: 16px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, #0D1B2A 0%, #1E3A5F 60%, #2C5282 100%);
+      color: white;
+      padding: 80px 24px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(230,57,70,0.15) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      border-radius: 50%;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.85);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: #E63946; }
+    .hero p {
+      font-size: 18px;
+      color: rgba(255,255,255,0.7);
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+    .hero-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 12px;
+      font-size: 14px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+      cursor: pointer; border: none;
+    }
+    .btn-primary { background: var(--red); color: white; }
+    .btn-primary:hover { background: #c1121f; transform: translateY(-2px); }
+    .btn-outline {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+
+    /* ── Section layout ───────────────────────────────────────── */
+    .section { padding: 72px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 48px;
+    }
+
+    /* ── App Project Card ─────────────────────────────────────── */
+    .project-card {
+      background: var(--white);
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 48px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      border: 1px solid var(--border);
+    }
+    .project-header {
+      padding: 36px 40px 28px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .project-meta { flex: 1; min-width: 260px; }
+    .project-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      margin-bottom: 14px;
+    }
+    .project-name {
+      font-size: 26px; font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .project-desc {
+      font-size: 15px; color: var(--muted);
+      max-width: 520px; line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      display: inline-block;
+      padding: 4px 12px; border-radius: 999px;
+      font-size: 12px; font-weight: 600;
+      background: #EFF4FF; color: #1E40AF;
+    }
+    .tag.green { background: #ECFDF5; color: #065F46; }
+    .tag.red   { background: #FEF2F2; color: #991B1B; }
+    .tag.purple{ background: #F5F3FF; color: #5B21B6; }
+
+    .project-actions {
+      display: flex; flex-direction: column;
+      gap: 10px; align-items: flex-end;
+    }
+    .github-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #0D1B2A; color: white;
+      padding: 10px 20px; border-radius: 10px;
+      font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .github-btn:hover { background: #1E3A5F; transform: translateY(-2px); }
+
+    /* ── Phone screenshots ────────────────────────────────────── */
+    .screenshots-row {
+      display: flex;
+      gap: 0;
+      padding: 32px 40px;
+      overflow-x: auto;
+      background: #F8FAFC;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .phone-frame {
+      flex-shrink: 0;
+      position: relative;
+      width: 200px;
+    }
+    .phone-frame .label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .phone-shell {
+      background: #1a1a1a;
+      border-radius: 36px;
+      padding: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.08);
+      position: relative;
+    }
+    .phone-shell::before {
+      content: '';
+      position: absolute;
+      top: 14px; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 6px;
+      background: #333; border-radius: 3px;
+      z-index: 2;
+    }
+    .phone-screen {
+      border-radius: 28px;
+      overflow: hidden;
+      background: #f0f0f0;
+      aspect-ratio: 9/19.5;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .phone-screen img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .phone-screen .placeholder {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px; padding: 16px; text-align: center;
+      color: #999; font-size: 11px;
+    }
+    .phone-screen .placeholder .icon { font-size: 28px; }
+
+    /* ── Features list ────────────────────────────────────────── */
+    .features-row {
+      padding: 28px 40px 36px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .feature-item {
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .feature-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--navy); flex-shrink: 0; margin-top: 7px;
+    }
+    .feature-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .feature-text strong { color: var(--text); display: block; font-size: 14px; }
+
+    /* ── Tech stack section ───────────────────────────────────── */
+    .tech-section {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .tech-item {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .tech-item:hover { border-color: var(--navy); transform: translateY(-2px); }
+    .tech-item .tech-icon { font-size: 24px; margin-bottom: 6px; }
+    .tech-item .tech-name { font-size: 12px; font-weight: 600; color: var(--text); }
+    .tech-item .tech-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ── About section ────────────────────────────────────────── */
+    .about-card {
+      background: linear-gradient(135deg, #0D1B2A, #1E3A5F);
+      color: white;
+      border-radius: 24px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: center;
+    }
+    .about-card h2 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+    .about-card p { color: rgba(255,255,255,0.7); font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+    .about-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .about-avatar {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px; flex-shrink: 0;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      text-align: center; padding: 32px 24px;
+      color: var(--muted); font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Data points badge row ────────────────────────────────── */
+    .datapoints {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 0 40px 28px;
+    }
+    .datapoint {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      color: #166534;
+      padding: 4px 12px; border-radius: 999px;
+      font-size: 12px; font-weight: 500;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .datapoint::before { content: '✓'; font-weight: 700; }
+
+    @media (max-width: 640px) {
+      .project-header { padding: 24px; }
+      .screenshots-row { padding: 24px; }
+      .features-row { padding: 20px 24px 28px; grid-template-columns: 1fr 1fr; }
+      .datapoints { padding: 0 24px 20px; }
+      .about-card { grid-template-columns: 1fr; }
+      .about-avatar { display: none; }
+      .project-actions { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Hero ──────────────────────────────────────────────────────── -->
+<header class="hero">
+  <div class="hero-badge">📱 Android Developer · University of Rochester</div>
+  <h1>Harry's<br/><span>Android</span> Portfolio</h1>
+  <p>Building polished, production-quality Android apps with Kotlin & Jetpack Compose</p>
+  <div class="hero-links">
+    <a href="https://github.com/wumingzh-cmu-S26" class="btn btn-primary" target="_blank">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+    <a href="mailto:YOUR_EMAIL@gmail.com" class="btn btn-outline">
+      ✉️ Contact Me
+    </a>
+  </div>
+</header>
+
+<!-- ── Projects ───────────────────────────────────────────────────── -->
+<main class="section">
+  <p class="section-label">Projects</p>
+  <h2 class="section-title">What I've Built</h2>
+
+  <!-- ── NewsFlow ─────────────────────────────────────────────────── -->
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-meta">
+        <div class="project-icon" style="background:#EFF6FF;">📰</div>
+        <div class="project-name">NewsFlow</div>
+        <p class="project-desc">
+          Real-time global news app fetching live articles via NewsAPI REST API.
+          Features category discovery, full-text worldwide search with debouncing,
+          offline bookmarks, and detailed article views across 4 screens.
+        </p>
+        <div class="tags">
+          <span class="tag">Kotlin</span>
+          <span class="tag">Jetpack Compose</span>
+          <span class="tag">Retrofit</span>
+          <span class="tag">MVVM</span>
+          <span class="tag green">Room DB</span>
+          <span class="tag green">Coroutines + Flow</span>
+          <span class="tag purple">Hilt DI</span>
+          <span class="tag red">NewsAPI</span>
+        </div>
+      </div>
+      <div class="project-actions">
+        <a href="https://github.com/wumingzh-cmu-S26/NewsFlow" class="github-btn" target="_blank">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+        <span style="font-size:12px;color:var(--muted);text-align:right;">Mar 2026</span>
+      </div>
+    </div>
+
+    <!-- API data points confirmed from live app -->
+    <div class="datapoints">
+      <div class="datapoint">Title</div>
+      <div class="datapoint">Publisher</div>
+      <div class="datapoint">Author</div>
+      <div class="datapoint">Description</div>
+      <div class="datapoint">Direct URL</div>
+      <div class="datapoint">Hero Image</div>
+      <div class="datapoint">Published Date</div>
+      <div class="datapoint">Article Content</div>
+    </div>
+
+    <!-- Screenshots — drop your phone screenshots into screenshots/ folder -->
+    <div class="screenshots-row">
+      <div class="phone-frame">
+        <div class="label">Home</div>
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <img src="screenshots/newsflow-home.png" alt="NewsFlow Home"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="placeholder" style="display:none">
+              <div class="icon">🏠</div>
+              <div>Add newsflow-home.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-frame">
+        <div class="label">Discover</div>
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <img src="screenshots/newsflow-categories.png" alt="NewsFlow Categories"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="placeholder" style="display:none">
+              <div class="icon">🔍</div>
+              <div>Add newsflow-categories.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-frame">
+        <div class="label">Article Detail</div>
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <img src="screenshots/newsflow-detail.png" alt="NewsFlow Article Detail"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="placeholder" style="display:none">
+              <div class="icon">📄</div>
+              <div>Add newsflow-detail.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-frame">
+        <div class="label">Saved</div>
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <img src="screenshots/newsflow-bookmarks.png" alt="NewsFlow Bookmarks"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="placeholder" style="display:none">
+              <div class="icon">🔖</div>
+              <div>Add newsflow-bookmarks.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-row">
+      <div class="feature-item">
+        <div class="feature-dot"></div>
+        <div class="feature-text">
+          <strong>Breaking News Feed</strong>
+          Horizontal card scroll with hero images and gradient overlays
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot"></div>
+        <div class="feature-text">
+          <strong>7-Category Discovery</strong>
+          Business, Tech, Sports, Health, Entertainment, Science, General
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot"></div>
+        <div class="feature-text">
+          <strong>Debounced Search</strong>
+          500ms debounce across millions of worldwide articles via /everything
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot"></div>
+        <div class="feature-text">
+          <strong>Offline Bookmarks</strong>
+          Articles saved locally with Room — persist across app restarts
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ExpenseFlow ───────────────────────────────────────────────── -->
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-meta">
+        <div class="project-icon" style="background:#F0FDF4;">💸</div>
+        <div class="project-name">ExpenseFlow</div>
+        <p class="project-desc">
+          Smart expense tracker with on-device ML Kit receipt scanning.
+          Point the camera at any receipt — merchant name, amount, and category
+          auto-fill instantly. Tracks budgets per category with animated progress bars.
+        </p>
+        <div class="tags">
+          <span class="tag">Kotlin</span>
+          <span class="tag">Jetpack Compose</span>
+          <span class="tag green">ML Kit OCR</span>
+          <span class="tag green">CameraX</span>
+          <span class="tag">Room DB</span>
+          <span class="tag purple">Hilt DI</span>
+          <span class="tag red">Canvas Charts</span>
+        </div>
+      </div>
+      <div class="project-actions">
+        <a href="https://github.com/wumingzh-cmu-S26/ExpenseFlow" class="github-btn" target="_blank">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+        <span style="font-size:12px;color:var(--muted);text-align:right;">Mar 2026</span>
+      </div>
+    </div>
+
+    <!-- Screenshots -->
+    <div class="screenshots-row">
+      <div class="phone-frame">
+        <div class="label">Dashboard</div>
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <img src="screenshots/expense-dashboard.png" alt="ExpenseFlow Dashboard"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="placeholder" style="display:none">
+              <div class="icon">📊</div>
+              <div>Add expense-dashboard.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-frame">
+        <div class="label">Add Expense</div>
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <img src="screenshots/expense-add.png" alt="Add Expense"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="placeholder" style="display:none">
+              <div class="icon">➕</div>
+              <div>Add expense-add.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-frame">
+        <div class="label">History</div>
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <img src="screenshots/expense-history.png" alt="Transaction History"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="placeholder" style="display:none">
+              <div class="icon">📋</div>
+              <div>Add expense-history.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-frame">
+        <div class="label">Budgets</div>
+        <div class="phone-shell">
+          <div class="phone-screen">
+            <img src="screenshots/expense-budget.png" alt="Budget Tracker"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="placeholder" style="display:none">
+              <div class="icon">🎯</div>
+              <div>Add expense-budget.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-row">
+      <div class="feature-item">
+        <div class="feature-dot" style="background:var(--green)"></div>
+        <div class="feature-text">
+          <strong>ML Kit Receipt Scan</strong>
+          On-device OCR — no internet, no API cost, instant auto-fill
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot" style="background:var(--green)"></div>
+        <div class="feature-text">
+          <strong>Animated Donut Chart</strong>
+          Custom Canvas drawing — no third-party chart library
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot" style="background:var(--green)"></div>
+        <div class="feature-text">
+          <strong>Budget Tracking</strong>
+          Per-category monthly budgets with animated progress indicators
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot" style="background:var(--green)"></div>
+        <div class="feature-text">
+          <strong>Smart Category Inference</strong>
+          Auto-detects Food, Transport, Shopping from receipt merchant name
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tech Stack ────────────────────────────────────────────────── -->
+  <div class="tech-section">
+    <p class="section-label">Skills</p>
+    <h3 style="font-size:22px;font-weight:700;letter-spacing:-0.3px;">Tech Stack</h3>
+    <div class="tech-grid">
+      <div class="tech-item"><div class="tech-icon">🟣</div><div class="tech-name">Kotlin</div><div class="tech-desc">Primary language</div></div>
+      <div class="tech-item"><div class="tech-icon">🎨</div><div class="tech-name">Jetpack Compose</div><div class="tech-desc">Modern UI toolkit</div></div>
+      <div class="tech-item"><div class="tech-icon">🏗️</div><div class="tech-name">MVVM</div><div class="tech-desc">Architecture pattern</div></div>
+      <div class="tech-item"><div class="tech-icon">🌐</div><div class="tech-name">Retrofit</div><div class="tech-desc">REST API calls</div></div>
+      <div class="tech-item"><div class="tech-icon">🗃️</div><div class="tech-name">Room</div><div class="tech-desc">Local database</div></div>
+      <div class="tech-item"><div class="tech-icon">💉</div><div class="tech-name">Hilt</div><div class="tech-desc">Dependency injection</div></div>
+      <div class="tech-item"><div class="tech-icon">🌊</div><div class="tech-name">Coroutines + Flow</div><div class="tech-desc">Async & reactive</div></div>
+      <div class="tech-item"><div class="tech-icon">👁️</div><div class="tech-name">ML Kit OCR</div><div class="tech-desc">On-device AI</div></div>
+      <div class="tech-item"><div class="tech-icon">📷</div><div class="tech-name">CameraX</div><div class="tech-desc">Camera integration</div></div>
+      <div class="tech-item"><div class="tech-icon">🐙</div><div class="tech-name">Git / GitHub</div><div class="tech-desc">Version control</div></div>
+    </div>
+  </div>
+
+  <!-- ── About ─────────────────────────────────────────────────────── -->
+  <div class="about-card">
+    <div>
+      <h2>Hi, I'm Harry 👋</h2>
+      <p>
+        Android developer studying at the University of Rochester.
+        I build clean, production-quality apps with modern Android architecture —
+        Jetpack Compose, MVVM, and Kotlin Coroutines.
+        Previously presented projects to professors and students at UR.
+      </p>
+      <div class="about-links">
+        <a href="https://github.com/wumingzh-cmu-S26" class="btn btn-primary" target="_blank">GitHub</a>
+        <a href="mailto:YOUR_EMAIL@gmail.com" class="btn btn-outline">Email Me</a>
+        <a href="https://linkedin.com/in/YOUR_LINKEDIN" class="btn btn-outline" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+    <div class="about-avatar">👨‍💻</div>
+  </div>
+</main>
+
+<footer>
+  <p>Built with HTML & CSS · Hosted on GitHub Pages · © 2026 Harry</p>
+</footer>
+
+</body>
+</html>
